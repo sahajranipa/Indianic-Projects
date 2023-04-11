@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -7,14 +5,8 @@ import "./App.css";
 import AddPost from "./components/AddPost";
 import Post from "./components/Post";
 import PostsList from "./components/PostsList";
-const App = () => {
-  const posts = useSelector((state) => state.posts);
 
-  useEffect(() => {
-    if (posts?.length) {
-      localStorage.setItem("myPosts", JSON.stringify(posts));
-    }
-  }, [posts]);
+const App = () => {
   return (
     <Router>
       <nav className='navbar navbar-expand navbar-dark bg-dark'>

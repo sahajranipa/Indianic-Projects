@@ -75,7 +75,7 @@ const PostsList = () => {
         </div>
       </div>
       <div className='col-md-6'>
-        <h4>Tutorials List</h4>
+        <h4>Posts List</h4>
 
         <ul className='list-group'>
           {posts &&
@@ -119,7 +119,7 @@ const PostsList = () => {
             </div>
 
             <Link
-              to={"/tutorials/" + currentPost.id}
+              to={"/posts/" + currentPost.id}
               className='badge badge-warning'>
               Edit
             </Link>

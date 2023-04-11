@@ -9,7 +9,7 @@ const getPost = (id) => {
 };
 
 const createPost = (data) => {
-  return http.post("/posts", data);
+  return http.post("/posts/add", data);
 };
 
 const updatePost = (id, data) => {
@@ -25,7 +25,7 @@ const removeAllPosts = () => {
 };
 
 const findByTitle = (title) => {
-  return http.get(`/posts?title=${title}`);
+  return http.get(`posts/search?q=${title}`);
 };
 
 const PostService = {

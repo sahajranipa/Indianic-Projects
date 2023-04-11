@@ -5,12 +5,22 @@ const initialState = [];
 
 export const createPost = createAsyncThunk(
   "posts/createPost",
-  async ({ title, description }) => {
-    const res = await PostDataService.createPost({ title, description });
+  async ({ userId, title, description }) => {
+    const res = await PostDataService.createPost({
+      userId,
+      title,
+      description,
+    });
     return res.data;
   }
 );
-
+export const retrievePost = createAsyncThunk(
+  "posts/retrievePost",
+  async ({ id }) => {
+    const res = await PostDataService.getPost({ id });
+    return res.data;
+  }
+);
 export const retrievePosts = createAsyncThunk(
   "posts/retrievePosts",
   async () => {
@@ -58,8 +68,14 @@ const postSlice = createSlice({
     [createPost.fulfilled]: (state, action) => {
       state.push(action.payload);
     },
+    [retrievePost.fulfilled]: (state, action) => {
+      const index = state.findIndex((post) => post.id === action.payload.id);
+      return {
+        ...state[index],
+      };
+    },
     [retrievePosts.fulfilled]: (state, action) => {
-      return [...action.payload];
+      return [...action.payload.posts];
     },
     [updatePost.fulfilled]: (state, action) => {
       const index = state.findIndex((post) => post.id === action.payload.id);
@@ -76,7 +92,7 @@ const postSlice = createSlice({
       return [];
     },
     [findPostsByTitle.fulfilled]: (state, action) => {
-      return [...action.payload];
+      return [...action.payload.posts];
     },
   },
 });

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createPost } from "../slices/posts";
 
-const AddTutorial = () => {
+const AddPost = () => {
   const initialState = {
     id: null,
+    userId: 5,
     title: "",
     description: "",
     published: false,
@@ -20,14 +21,15 @@ const AddTutorial = () => {
   };
 
   const savePost = () => {
-    const { title, description } = post;
+    const { userId, title, description } = post;
 
-    dispatch(createPost({ title, description }))
+    dispatch(createPost({ userId, title, description }))
       .unwrap()
       .then((data) => {
         console.log(data);
         setPost({
           id: data.id,
+          userId: data.userId,
           title: data.title,
           description: data.description,
           published: data.published,
@@ -67,7 +69,6 @@ const AddTutorial = () => {
               name='title'
             />
           </div>
-
           <div className='form-group'>
             <label htmlFor='description'>Description</label>
             <input
@@ -90,4 +91,4 @@ const AddTutorial = () => {
   );
 };
 
-export default AddTutorial;
+export default AddPost;
