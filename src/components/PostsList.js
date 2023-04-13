@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  retrievePosts,
-  findPostsByTitle,
-  deleteAllPosts,
-} from "../slices/posts";
+import { retrievePosts, findPostsByTitle } from "../slices/posts";
 import { Link } from "react-router-dom";
 
 const PostsList = () => {
@@ -36,16 +32,6 @@ const PostsList = () => {
   const setActivePost = (post, index) => {
     setCurrentPost(post);
     setCurrentIndex(index);
-  };
-
-  const removeAllPosts = () => {
-    dispatch(deleteAllPosts())
-      .then(() => {
-        refreshData();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   };
 
   const findByTitle = () => {
@@ -90,10 +76,6 @@ const PostsList = () => {
               </li>
             ))}
         </ul>
-
-        <button className='m-3 btn btn-sm btn-danger' onClick={removeAllPosts}>
-          Remove All
-        </button>
       </div>
       <div className='col-md-6'>
         {currentPost ? (
