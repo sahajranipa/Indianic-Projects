@@ -21,15 +21,14 @@ const AddPost = () => {
   };
 
   const savePost = () => {
-    const { userId, title, description } = post;
+    const { title, description } = post;
 
-    dispatch(createPost({ userId, title, description }))
+    dispatch(createPost({ title, description }))
       .unwrap()
       .then((data) => {
         console.log(data);
         setPost({
           id: data.id,
-          userId: data.userId,
           title: data.title,
           description: data.description,
           published: data.published,

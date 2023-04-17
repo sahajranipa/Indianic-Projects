@@ -1,57 +1,41 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import PostDataService from "../services/PostService";
 
-const initialState = [];
+const initialState = { postData: [] };
 
 export const createPost = createAsyncThunk(
-  "posts/createPost",
-  async ({ userId, title, description }) => {
+  "/posts",
+  async ({ title, description }) => {
     const res = await PostDataService.createPost({
-      userId,
       title,
       description,
     });
     return res.data;
   }
 );
-export const retrievePost = createAsyncThunk(
-  "posts/retrievePost",
-  async ({ id }) => {
-    const res = await PostDataService.getPost({ id });
-    return res.data;
-  }
-);
-export const retrievePosts = createAsyncThunk(
-  "posts/retrievePosts",
-  async () => {
-    const res = await PostDataService.getAllPosts();
-    return res.data;
-  }
-);
+
+export const retrievePosts = createAsyncThunk("posts/retrieve", async () => {
+  const res = await PostDataService.getAllPosts();
+  return res.data;
+});
 
 export const updatePost = createAsyncThunk(
-  "posts/updatePost",
+  "posts/update",
   async ({ id, data }) => {
     const res = await PostDataService.updatePost(id, data);
     return res.data;
   }
 );
 
-export const deletePost = createAsyncThunk(
-  "posts/deletePost",
-  async ({ id }) => {
-    await PostDataService.removePost(id);
-    return { id };
-  }
-);
+export const deletePost = createAsyncThunk("posts/delete", async ({ id }) => {
+  await PostDataService.removePost(id);
+  return { id };
+});
 
-export const deleteAllPosts = createAsyncThunk(
-  "posts/deleteAllPosts",
-  async () => {
-    const res = await PostDataService.removeAllPosts();
-    return res.data;
-  }
-);
+export const deleteAllPosts = createAsyncThunk("posts/deleteAll", async () => {
+  const res = await PostDataService.removeAllPosts();
+  return res.data;
+});
 
 export const findPostsByTitle = createAsyncThunk(
   "posts/findByTitle",
@@ -62,40 +46,33 @@ export const findPostsByTitle = createAsyncThunk(
 );
 
 const postSlice = createSlice({
-  name: "post",
+  name: "posts",
   initialState,
+  reducers: {},
+
   extraReducers: {
-    [createPost.fulfilled]: (state, action) => {
-      state.push(action.payload);
-    },
-    [retrievePost.fulfilled]: (state, action) => {
-      const index = state.findIndex((post) => post.id === action.payload.id);
-      return {
-        ...state[index],
-      };
-    },
-    [retrievePosts.fulfilled]: (state, action) => {
-      return [...action.payload.posts];
-    },
-    [updatePost.fulfilled]: (state, action) => {
-      const index = state.findIndex((post) => post.id === action.payload.id);
-      state[index] = {
-        ...state[index],
-        ...action.payload,
-      };
-    },
-    [deletePost.fulfilled]: (state, action) => {
-      let index = state.findIndex(({ id }) => id === action.payload.id);
-      state.splice(index, 1);
-    },
-    [deleteAllPosts.fulfilled]: (state, action) => {
-      return [];
-    },
-    [findPostsByTitle.fulfilled]: (state, action) => {
-      return [...action.payload.posts];
+    extraReducers: (builder) => {
+      builder.addCase(retrievePosts.fulfilled, (state, action) => {
+        state.postData = action.payload;
+      });
+      builder.addCase(createPost.fulfilled, (state, action) => {
+        state.postData.unshift(action.payload);
+      });
+      builder.addCase(updatePost.fulfilled, (state, action) => {
+        state.postData = state.postData.filter(
+          (id) => id !== action.payload.id
+        );
+        state.postData.unshift(action.payload);
+      });
+      builder.addCase(deletePost.fulfilled, (state, action) => {
+        state.postData = state.postData.filter((id) => id !== action.payload);
+      });
     },
   },
 });
-
-const { reducer } = postSlice;
-export default reducer;
+export const getAllPosts = (state) => state.post.postData;
+export const getPostById = (id) => {
+  return (state) => state.post.postData.filter((pid) => pid === id)[0];
+};
+export const { allPostsRecieved } = postSlice.actions;
+export default postSlice.reducer;

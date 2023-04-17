@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { retrievePosts, findPostsByTitle } from "../slices/posts";
+import { getAllPosts, findPostsByTitle } from "../slices/posts";
 import { Link } from "react-router-dom";
 
 const PostsList = () => {
   const [currentPost, setCurrentPost] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchTitle, setSearchTitle] = useState("");
-
-  const posts = useSelector((state) => state.posts);
+  const allPosts = useSelector(getAllPosts);
   const dispatch = useDispatch();
 
   const onChangeSearchTitle = (e) => {
@@ -17,8 +16,10 @@ const PostsList = () => {
   };
 
   const initFetch = useCallback(() => {
-    dispatch(retrievePosts());
-  }, [dispatch]);
+    if (allPosts.length === 0) {
+      dispatch(getAllPosts());
+    }
+  }, [dispatch, allPosts.length]);
 
   useEffect(() => {
     initFetch();
@@ -64,8 +65,8 @@ const PostsList = () => {
         <h4>Posts List</h4>
 
         <ul className='list-group'>
-          {posts &&
-            posts.map((post, index) => (
+          {allPosts &&
+            allPosts.map((post, index) => (
               <li
                 className={
                   "list-group-item " + (index === currentIndex ? "active" : "")
