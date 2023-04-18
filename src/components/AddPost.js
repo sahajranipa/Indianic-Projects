@@ -5,14 +5,12 @@ import { createPost } from "../slices/posts";
 const AddPost = () => {
   const initialState = {
     id: null,
-    userId: 5,
     title: "",
     description: "",
     published: false,
   };
   const [post, setPost] = useState(initialState);
   const [submitted, setSubmitted] = useState(false);
-
   const dispatch = useDispatch();
 
   const handleInputChange = (event) => {

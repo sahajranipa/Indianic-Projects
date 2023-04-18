@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPosts, findPostsByTitle } from "../slices/posts";
+import { getAllPosts, retrievePosts, findPostsByTitle } from "../slices/posts";
 import { Link } from "react-router-dom";
 
 const PostsList = () => {
@@ -16,10 +16,8 @@ const PostsList = () => {
   };
 
   const initFetch = useCallback(() => {
-    if (allPosts.length === 0) {
-      dispatch(getAllPosts());
-    }
-  }, [dispatch, allPosts.length]);
+    dispatch(retrievePosts());
+  }, [dispatch]);
 
   useEffect(() => {
     initFetch();

@@ -49,30 +49,27 @@ const postSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {},
-
-  extraReducers: {
-    extraReducers: (builder) => {
-      builder.addCase(retrievePosts.fulfilled, (state, action) => {
-        state.postData = action.payload;
-      });
-      builder.addCase(createPost.fulfilled, (state, action) => {
-        state.postData.unshift(action.payload);
-      });
-      builder.addCase(updatePost.fulfilled, (state, action) => {
-        state.postData = state.postData.filter(
-          (id) => id !== action.payload.id
-        );
-        state.postData.unshift(action.payload);
-      });
-      builder.addCase(deletePost.fulfilled, (state, action) => {
-        state.postData = state.postData.filter((id) => id !== action.payload);
-      });
-    },
+  extraReducers: (builder) => {
+    builder.addCase(retrievePosts.fulfilled, (state, action) => {
+      state.postData = action.payload;
+    });
+    builder.addCase(createPost.fulfilled, (state, action) => {
+      state.postData.unshift(action.payload);
+    });
+    builder.addCase(updatePost.fulfilled, (state, action) => {
+      state.postData = state.postData.filter((id) => id !== action.payload.id);
+      state.postData.unshift(action.payload);
+    });
+    builder.addCase(deletePost.fulfilled, (state, action) => {
+      state.postData = state.postData.filter((id) => id !== action.payload);
+    });
+    builder.addCase(findPostsByTitle.fulfilled, (state, action) => {
+      state.postData = [...action.payload];
+    });
   },
 });
 export const getAllPosts = (state) => state.post.postData;
 export const getPostById = (id) => {
   return (state) => state.post.postData.filter((pid) => pid === id)[0];
 };
-export const { allPostsRecieved } = postSlice.actions;
 export default postSlice.reducer;
