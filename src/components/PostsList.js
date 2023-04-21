@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPosts, retrievePosts, findPostsByTitle } from "../slices/posts";
+import { getAllPosts, findPostsByTitle } from "../slices/posts";
 import { Link } from "react-router-dom";
 
 const PostsList = () => {
@@ -9,19 +9,11 @@ const PostsList = () => {
   const [searchTitle, setSearchTitle] = useState("");
   const allPosts = useSelector(getAllPosts);
   const dispatch = useDispatch();
-
+  console.log("allPosts", allPosts);
   const onChangeSearchTitle = (e) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
   };
-
-  const initFetch = useCallback(() => {
-    dispatch(retrievePosts());
-  }, [dispatch]);
-
-  useEffect(() => {
-    initFetch();
-  }, [initFetch]);
 
   const refreshData = () => {
     setCurrentPost(null);

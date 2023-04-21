@@ -20,11 +20,8 @@ const AddPost = () => {
 
   const savePost = () => {
     const { title, description } = post;
-
-    dispatch(createPost({ title, description }))
-      .unwrap()
-      .then((data) => {
-        console.log(data);
+    Promise.resolve(dispatch(createPost({ title, description }))).then(
+      (data) => {
         setPost({
           id: data.id,
           title: data.title,
@@ -32,10 +29,8 @@ const AddPost = () => {
           published: data.published,
         });
         setSubmitted(true);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      }
+    );
   };
 
   const newPost = () => {
